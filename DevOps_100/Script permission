@@ -1,0 +1,5 @@
+Provide permission to the  other users to exceute the script
+
+chmod 755 script.sh 
+
+(note: you should not only provide execute permission like 711 because where it's its recommened to give read persmission as well)
