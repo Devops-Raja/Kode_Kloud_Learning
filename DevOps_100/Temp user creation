@@ -1,0 +1,4 @@
+Temprorary user creation with expiry date:
+
+[root@stapp03 ~]# useradd -e 2024-03-28 javed 
+[root@stapp03 ~]# cut -d: -f1 /etc/passwd              ##checking user created 
