@@ -1,0 +1,6 @@
+creating a non interactive user:
+
+sudo adduser username -s /sbin/nologin
+cut -d: -f1 /etc/passwd
+
+# Check the user is already exists ( if yes - remove the user with home directory [ userdel -r username ]  ) 
