@@ -1,0 +1,8 @@
+disable direct SSH root login:
+
+* ssh to the server
+-- vi /etc/ssh/sshd_config
+
+-- PermitRootLogin yes  >> change it to "no" and save the file 
+--  sudo systemctl restart sshd
+
