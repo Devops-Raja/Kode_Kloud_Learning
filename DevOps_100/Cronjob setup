@@ -1,0 +1,11 @@
+Install Conie ( yum install cronie )
+
+crontab -e 
+
+setup the cron job eg:  */5 * * * * echo hello > /tmp/cron_text
+
+crontab -l  ## to list the jobs 
+
+
+Note: Make sure in which user you want to create CRON JOB.
+Switch to the user then create CRON JOB
