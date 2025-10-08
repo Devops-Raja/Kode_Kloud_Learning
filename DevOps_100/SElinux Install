@@ -1,0 +1,24 @@
+SE Linux Installation and Configuration:
+
+SELinux (Security-Enhanced Linux) is a mandatory access control (MAC) system built into Linux (mostly Red Hat / CentOS / Fedora).
+
+It adds an extra layer of security on top of traditional file permissions (rwx) — 
+controlling which processes can access which files, ports, or devices, even if file permissions would normally allow it.
+
+--> sudo dnf install selinux-policy selinux-policy-targeted policycoreutils
+
+(If you disable SELinux, it means it’s completely turned off — the kernel doesn’t even load the SELinux module at boot)
+
+If you dont want to apply the SElinux polices then do below,
+
+sudo nano /etc/selinux/config
+change it to ---->   SELINUX=disabled
+
+Now after reboot
+
+
+Install SELinux packags	-- You have the tools and policy files available
+Set SELINUX=disabled	-- The SELinux system won’t run or enforce any rules
+Result =	The OS behaves like a system without SELinux — only normal Unix permissions apply
+
+
