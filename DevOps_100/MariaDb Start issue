@@ -1,0 +1,21 @@
+Maria DB Trouble shooting:
+
+App is unable to connect with the DB.
+Seems Maria DB service is down.
+
+Unable to start service:
+
+Do: 
+-- Check jounrnalctl logs
+-- Check var/lib/mysql logs
+-- This case --> Mysql is not able to communicate with the directory
+2025-10-09  8:30:00 0 [ERROR] InnoDB: Operating system error number 13 in a file operation.
+2025-10-09  8:30:00 0 [ERROR] InnoDB: The error means mysqld does not have the access rights to the directory.
+
+Solution:
+drwxr-xr-x 1 root mysql 4096 Oct  9 08:21 mysql
+/var/lib/mysql  - Permission changed 
+                - Ownership changed
+				
+				
+Start the Mariadb service. (Work done !!!)
