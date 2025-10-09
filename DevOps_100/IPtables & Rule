@@ -1,0 +1,32 @@
+INSTALLING IPTABLES AND CONFIGURE RULE TO ALLOW TRAFIC FROM SPECIFIC PORT AND HOST
+
+sudo yum install iptables-services -y
+	
+sudo systemctl start iptables && sudo systemctl enable iptables
+
+## Explicit IP Rule for allowing trafic from specific port & host 
+
+iptables -I INPUT 1 -p tcp --dport <PORT_NUMBER> -s <IP_ADDRESS> -j ACCEPT
+
+## All TCP traffic to port will be blocked unless a previous rule explicitly allows it.
+
+iptables -A INPUT -p tcp --dport <PORT_NUMBER> -j DROP
+
+## Save the rules to load the rules automatically after reboot
+service iptables save
+
+## Checking the rules are still there even after reboot
+systemctl restart iptables
+
+## Rules show
+sudo iptables -nvL
+
+Note:
+Case: firewalld was not installed on this server.
+"dnf install firewalld" failed because DNS/mirror issues prevented downloading packages.
+--iptables comes pre-installed on all Linux systems, so it works without extra packages.
+--iptables gives direct, low-level control, so you can allow/block ports immediately.
+
+
+ 
+ 
