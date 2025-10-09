@@ -1,0 +1,23 @@
+APACHE SERVICE IS DOWN IN THE APP SERVER && NOT ABLE TO CONNECT FROM THE JUMPHOST
+
+
+Issue & Solution:  on APP server
+-- Checked the journal logs etc
+-- httpd is configured to listen on 8084 But, port is already occupied by another sendmail service.
+## netstat -tulpn | grep 8084 (list output)
+-- httpd should listen on 8084, So stopped the sendmail service
+Then restarted the service, It works Fine.
+
+
+Issue: Cant reach the httpd server from Remote
+
+Analysis Done: checked the traceroute " traceroute host:port "
+It shows the connection is refused to the app server.
+FW is not installed and active
+Cause: IP tables are blocking the port
+
+Solution: Used iptables to explicitly allow TCP traffic on that port.
+[root@stapp01 ~]# sudo iptables -I INPUT -p tcp --dport 8084 -j ACCEPT
+[root@stapp01 ~]# iptables-save
+
+
