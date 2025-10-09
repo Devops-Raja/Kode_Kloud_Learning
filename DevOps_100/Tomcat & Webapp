@@ -1,0 +1,79 @@
+TOMCAT INSTALLTION AND DEPLOYING SAMPLE WEBAPP
+=========================================================================
+Installing Java
+Installing tomcat and tomcat webapps
+
+Creating user:
+useradd -m -U -d /opt/tomcat -s /bin/false tomcat
+
+start the tomcat service 
+configure the "server.xml" file is port change is needed
+do the all configuration setup if needed.
+
+
+if you have the root.war file ready.
+
+Make sure you replace the old ROOT folder under /usr/share/tomcat/webapps
+
+Make sure , permissions are granted properly
+Restart the service. 
+
+Its DONE !!!
+ 
+ 
+ =====================IN MORE PROPER WAY====================================
+ 
+-- Install Java
+-- Download the tomcat latest (wget)
+-- mkdir on /opt/tomcat  and extract the downloaded packaged
+
+-- set permissions as below
+
+sudo chown -R tomcat:tomcat /opt/tomcat
+sudo chmod -R 755 /opt/tomcat
+
+-- create a systemd file 
+sudo vi /etc/systemd/system/tomcat.service
+
+Paste the configuration:
+------------------------------------------------------------------------------------------
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+---------------------------------------------------------------------------------------
+
+--- Enable firewall if needed  
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+
+--- change the port if needed (server.xml file)
+--- webmanagement users for tomcat app (tomcat-users.xml file )
+--- Place your root.war file under webapps for deploy your app 
+--- Reload the service -- It's DONE !!!
+
+
+
+=====================================END=================================================
