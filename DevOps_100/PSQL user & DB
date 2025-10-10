@@ -1,0 +1,30 @@
+POSTGRES DB  Already installed on server:
+
+
+[root@stdb01 ~]# sudo -i -u postgres  [Switched to psql user ]
+
+[postgres@stdb01 ~]$ psql -c "CREATE USER kodekloud_rin WITH PASSWORD 'TmPcZjtRQx';"
+CREATE ROLE     
+[created user with the password ]
+
+[postgres@stdb01 ~]$ psql -c "CREATE DATABASE kodekloud_db2 OWNER kodekloud_rin;"
+CREATE DATABASE
+[created database]
+
+
+[postgres@stdb01 ~]$ psql -c "GRANT ALL PRIVILEGES ON DATABASE kodekloud_db2 TO kodekloud_rin;"
+GRANT
+[Permission granted to the user and DB ]
+
+
+----------------Checking the user created and DB created---------------
+[postgres@stdb01 ~]$ psql -U kodekloud_rin -d kodekloud_db2 -W
+Password: 
+psql (13.14)
+Type "help" for help.
+
+kodekloud_db2=> /dt
+kodekloud_db2->  ( showing empty DB)
+
+
+=====END======
