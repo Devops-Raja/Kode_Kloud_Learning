@@ -1,0 +1,26 @@
+===================NGNIX INSTALL / CONFIG / DEPLOY=========
+
+-- Install EPEL Repository (if needed): Nginx is often available in the EPEL (Extra Packages for Enterprise Linux) repository.
+
+sudo yum install epel-release
+
+sudo yum install nginx
+
+Start the service  ; 
+Enable the service ;If you want a start automatically after boot
+
+/usr/share/ngnix/html - Website file
+
+
+================SETUP SSL FOR NGNIX==================
+
+ ssl_certificate "/etc/pki/nginx/server.crt";
+        ssl_certificate_key "/etc/pki/nginx/private/server.key";
+        ssl_session_cache shared:SSL:1m;
+		
+--->> THIS IS my location in the nginx.conf file
+-- Place the .crt and .key files in the respective locations
+-- Restart the service  
+
+
+Done !!!
