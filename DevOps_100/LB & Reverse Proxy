@@ -1,0 +1,50 @@
+=============================Reverse Proxy==========================================
+
+Definition:
+A reverse proxy is a server that sits in front of one or more backend servers and forwards client requests to them.
+
+Key Points:
+
+The client never talks directly to the backend server.
+
+The reverse proxy receives the request, forwards it to a backend server, gets the response, and sends it back to the client.
+
+
+=========================LOAD balancer ============================================
+A load balancer is a system that distributes incoming requests among multiple backend servers to balance the load.
+
+Key Points:
+
+Improves performance and availability.
+
+Common algorithms:
+
+Round-robin → evenly cycles through servers.
+
+Least connections → sends to server with fewest active connections.
+
+IP hash / sticky session → same client always goes to the same server.
+
+Can be combined with reverse proxy functionality.
+
+Client
+   │
+   ▼
+Nginx (Reverse Proxy + Load Balancer)
+   │          │          │
+   ▼          ▼          ▼
+stapp01     stapp02     stapp03 (all Apache)
+   │          │          │
+   └──────────┴──────────┘
+           Response back to Client
+
+=-==============================================================
+✅ In Your Setup
+
+Nginx is both a reverse proxy and a load balancer.
+
+Clients never directly contact the Apache servers.
+
+Apache servers (httpd) generate the actual web pages.
+
+Load balancing ensures no single Apache server is overloaded.
