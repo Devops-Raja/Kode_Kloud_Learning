@@ -1,0 +1,59 @@
+===================INSTALL HTTPD & PHP in  all app the server===================
+
+    sudo yum install httpd php php-mysqlnd php-pdo php-gd php-mbstring -y
+	sudo systemctl enable httpd
+    sudo systemctl start httpd
+	
+	Change the HTTPD listen port if needed ( HTTPD.conf file)
+	
+Note: Make sure you add the right users and credentials in /var/www/html/index.php file
+
+
+===================ON Database server --- Setup MARIA DB===================
+
+    sudo yum install mariadb-server -y
+    sudo systemctl enable mariadb
+    sudo systemctl start mariadb
+	
+	
+===================CREATE DB user for APP access to Database===================
+
+	mysql -u root -p
+    CREATE DATABASE DB_name;
+    CREATE USER 'user'@'%' IDENTIFIED BY 'your_secure_password';   ( Make sure you create user for remote hosts )
+    GRANT ALL PRIVILEGES ON DB_name* TO 'user'@'%';
+    FLUSH PRIVILEGES;
+    EXIT;
+
+Single Command  --->>>  GRANT ALL PRIVILEGES ON my_database.* TO 'my_user'@'%' IDENTIFIED BY 'my_passwd';
+
+Now restart Maria DB - then app should be able to connect with Database.
+
+===============Task DONE ===============================================
+
+
+L	Linux	The operating system — the foundation that runs everything else.
+A	Apache	The web server — handles HTTP requests from users (browsers) and serves web pages.
+M	MySQL / MariaDB	The database — stores data like user info, blog posts, products, etc.
+P	PHP	Server-side scripting language — generates dynamic content (like login pages, dashboards).
+
+
+User opens a website in a browser:
+
+http://example.com
+
+
+-- Apache receives the request.
+
+-- If the page is static (.html), Apache serves it directly.
+-- If the page is dynamic (.php), Apache sends it to PHP.
+
+--PHP executes the code:
+
+--Reads/writes data in MySQL/MariaDB.
+
+--Generates HTML content.
+
+--Apache sends the HTML back to the browser.
+
+--The user sees the webpage.
