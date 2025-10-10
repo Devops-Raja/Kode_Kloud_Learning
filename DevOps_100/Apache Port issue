@@ -1,0 +1,8 @@
+Apache / HTTPD not running:
+
+CAUSE: Port Already occupied with another service
+
+Solution: Change the port for another serive in respective config file.
+-- Restart the apache service. 
+
+-- WORK DONE !!!
