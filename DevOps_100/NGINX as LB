@@ -1,0 +1,134 @@
+Task:
+Install NGINX in LB server and Make use all 3 app servers in load balancing
+
+--Installed nginx in the LB server and Configured as below:
+--Make sure all the app servers are listening to the mentioned port in nginx.conf files
+
+
+-----------------------------------------------------------------------------------------
+[root@stlb01 nginx]# cat nginx.conf
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+     
+    upstream app_backend {
+        server 172.16.238.10:5003;
+        server 172.16.238.11:5003;
+        server 172.16.238.12:5003;
+        # Default algorithm = round-robin
+    }
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80;
+        listen       [::]:80;
+        server_name  _;
+        root         /usr/share/nginx/html;
+             
+        location / {
+            proxy_pass http://app_backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        error_page 404 /404.html;
+        location = /404.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+        }
+    }
+
+
+}
+
+-----------------------------------------------------------------------------------------
+============Load Balancer Server (Nginx)==============
+
+Nginx is installed and listening on port 80.
+
+This is the server clients (browsers) connect to.
+
+=============App Servers (httpd/Apache)================
+
+Multiple servers (stapp01, stapp02, stapp03).
+
+Each running Apache HTTPD on port 5003.
+
+They host the actual web content/pages.
+
+
+
+          ┌───────────┐
+          │  Browser  │
+          └─────┬─────┘
+                │ HTTP Request (port 80)
+                ▼
+        ┌───────────────┐
+        │    Nginx LB    │
+        │  (port 80)     │
+        └─────┬─────────┘
+      Round-Robin / Proxy
+      /                 \
+     ▼                   ▼
+┌──────────┐        ┌──────────┐
+│ httpd:5003│        │ httpd:5003│
+│ stapp01   │        │ stapp02   │
+└──────────┘        └──────────┘
+      \                 /
+       \               /
+        ▼             ▼
+       Response sent back to Nginx
+                │
+                ▼
+          Browser displays the page
+
+
+============How Nginx and httpd Are Connected:=============
+
+Nginx is a reverse proxy + load balancer.
+
+It doesn’t store the website itself (unless you put static files there).
+
+Nginx connects to httpd on the port where Apache is listening (5003 in your case) and forwards client requests.
+
+All client traffic goes through Nginx, which decides which app server handles it.
+
