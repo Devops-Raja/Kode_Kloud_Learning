@@ -1,0 +1,46 @@
+GIT : Multiple Small tasks
+
+-------------------------GIT BARE REPO----------------------
+--A bare repository is a special kind of Git repo that contains only the version history (commits, branches, tags, etc.) 
+— it has no working files (no editable source code).
+
+It’s typically used as a central repository for collaboration 
+— the place everyone pushes to and pulls from (like a remote repo).
+
+###git init --bare my_project.git
+
+--------------------NORMAL REPO-------------------------------
+Normal repo = your personal working copy (local)
+
+write code,track changes,commit updates,push to or pull from a remote repo (like GitHub or a bare repo).
+
+It has two parts:
+
+The .git/ folder — contains all Git history, branches, and metadata.
+
+The working directory — your actual project files (the editable code).
+
+git init my_project
+ 
+------------------------------------CLONE GIT REPO-----------------------------------------------------
+
+repo located in /opt/games.git  
+Task: Clone under /usr/
+
+## cd /usr/
+## git clone /opt/games.git    
+
+----------DONE-------------
+
+------------------------------------ FORK A GIT REPO ------------------------------------
+
+
+FORK a Repo from UI   (use fork option, to use locally  then contribute to the repo by PR )
+
+--------------------------------------GIT BRANCH--------------------------------------------------
+
+### git checkout -b branch_name
+
+Make sure you switch to the  master branch or other, from where you want to create a new branch
+
+----------------------------------------------------------------------------------
