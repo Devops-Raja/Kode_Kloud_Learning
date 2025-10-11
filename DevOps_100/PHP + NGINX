@@ -1,0 +1,90 @@
+# 1a. Install EPEL (Extra Packages for Enterprise Linux)
+sudo dnf install -y epel-release
+
+# 1b. Enable the CodeReady Linux Builder (CRB) repository
+sudo dnf config-manager --set-enabled crb
+
+# Install the Remi repository package for EL 9
+sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm
+
+
+# Reset any existing PHP module stream configuration
+sudo dnf module reset php -y
+
+# Enable the PHP 8.1 module stream provided by Remi
+sudo dnf module enable php:remi-8.1 -y
+
+sudo dnf install -y php php-fpm
+
+
+------------------------------------ALL above setup is to install the php-pfm
+
+
+--------------- SETUP NGINX-------------
+-- install nginx and config the nginx listen to required port.
+-- Restart and now nginx is running
+
+
+----------------- PHP + NGINX work togther -------------------------------
+
+-- setup unix socket in the php config file
+sudo vi /etc/php-fpm.d/www.conf
+
+Changes:::
+listen = /var/run/php-fpm/default.sock   ( changing unix socket for better performance )
+listen.owner = nginx      # (if apache server, you have to change accordingly_)
+listen.group = nginx      
+listen.mode = 0660
+
+-------------------------------Create directory for socket:
+
+sudo mkdir -p /var/run/php-fpm/
+sudo chown -R nginx:nginx /var/run/php-fpm/ 
+
+sudo systemctl enable php-fpm
+sudo systemctl restart php-fpm    (Restart)
+
+===========================-------------------------------
+
+Config changes in NGINX inside server block ( PHP config )
+
+-------------------------------->>
+server {
+    listen 80;  ##(specfic port if needed )
+    server_name localhost;
+
+    root /var/www/html;    ###inside this only index.php files are there
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+## Config for PHP-fpm
+    location ~ \.php$ {        
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php-fpm/default.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+
+
+---------------- Again restart the nginx ---
+
+Website is working !!! ========END -==============
+
+
+
+Learnings: WHY PHP ?
+Nginx is a web server, not a programming engine.
+
+It can serve static files (HTML, images, CSS, JS) directly.
+
+But for dynamic files like index.php, it cannot interpret PHP code.
+
+That’s why we need PHP-FPM — it runs PHP scripts and returns the HTML output to Nginx.
