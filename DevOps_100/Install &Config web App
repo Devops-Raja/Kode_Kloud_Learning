@@ -1,0 +1,77 @@
+################## Apache Setup for News and Demo Websites on Port 3000
+
+Sets up two static websites (`news` and `demo`) on Apache, served on port `3000`
+
+--— -------------------------- Move them into Apache’s web root:
+
+sudo mv /tmp/news /var/www/html/      (news, demo are the static website folders)
+sudo mv /tmp/demo /var/www/html/
+
+-----------------------------Make Apache listen on port 3000
+
+Edit Apache’s main config file:
+
+sudo vi /etc/httpd/conf/httpd.conf
+
+-------------------------- Create a VirtualHost for port 3000
+[[[ Why do we need VirtualHost?  -- With VirtualHost?
+
+You can serve multiple websites on the same server:
+
+http://localhost:8087/beta/ → /var/www/html/beta/
+
+http://localhost:8087/apps/ → /var/www/html/apps/  ]]]
+
+Each site can have its own rules, aliases, SSL certificates, etc.
+
+Create a new Apache config file:
+
+sudo vi /etc/httpd/conf.d/sites_static.conf
+
+
+Add this content:
+
+<VirtualHost *:3000>
+    ServerName localhost
+
+    # News site
+    Alias /news/ "/var/www/html/news/"
+    <Directory "/var/www/html/news">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # Demo site
+    Alias /demo/ "/var/www/html/demo/"
+    <Directory "/var/www/html/demo">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+
+
+-------------------------- Check configuration
+
+sudo apachectl configtest
+
+Should display:
+
+Syntax OK
+
+
+Restart Apache and enable it on boot:
+
+sudo systemctl restart httpd
+sudo systemctl enable httpd
+
+-------------------------- Verify setup
+
+Test locally on App Server:
+
+curl http://localhost:3000/news/
+curl http://localhost:3000/demo/
+
+===========================================END=================
