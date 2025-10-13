@@ -1,0 +1,34 @@
+git reset --hard   :
+
+git reset is a Git command used to move the HEAD (the current branch pointer) to another commit.
+
+git reset --hard commit_id    ( head will be reset and pointing to the commit_id )
+git reset --hard  HEAD        ( undo the last commit )
+
+After reset push --force  -- DONE
+
+=========================================================================================
+Git STASH & POP :::::
+
+temporarily saves your uncommitted changes (both staged and unstaged)
+so you can work on something else or switch branches without losing your work.
+
+ git stash list  ( list the stash files)
+ 
+ eg: 
+ [root@ststor01 demo]# git stash list
+stash@{0}: WIP on master: adb3cbc initial commit
+stash@{1}: WIP on master: adb3cbc initial commit
+
+git stash pop 1  ( Bring back the particular commit && Stash will be removed from list )
+git stash apply stash@{1} ( Bring back the particular commit && Stash will there in  list )
+ 
+Remove a specific stash without applying it:
+git stash drop stash@{0}
+
+--- HOW TO STASH -----
+
+Move the working files to stage area (git add )
+then --> git stash  ( git stash push index.html -- stashing specific file )
+
+====================================END======================================
