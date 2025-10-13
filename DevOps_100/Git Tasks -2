@@ -1,0 +1,26 @@
+GIT REVERT:
+
+- git revert HEAD  ( reverting the latest commit )
+- git revert specific commit ( undo the changes in specific commit )
+
+-----------------------------------------------------------------------
+
+GIT Cherry Pick:
+
+git cherry-pick applies a specific commit (or several commits) from one branch onto another.
+
+- Go to the branch where you want to pickup specific commit Id
+- switch to target branch where you want to merge.
+
+git cherry-pick "commit_id"
+
+then push the changes to remote repo.
+--- DONE
+
+-----------------------------------------------------------------------------
+Create PR and Approve PR:
+
+Create a PR from UI ( Which branch you want to merge etc )
+PR will be reviewed and Approved
+
+============================================== END ===================
