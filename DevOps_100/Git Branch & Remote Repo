@@ -1,0 +1,56 @@
+GIT BRANCH:
+
+- Create a new branch from Master & Make changes
+- Merge the new branch with master branch ( Switch to master branch and Merge)
+- Push the both branches to origin
+- git push origin master && git push origin newbranch
+
+=================================================================================================================
+GIT Remote REPO - Explanation
+
+You’re working with Git repositories that exist locally and also as bare remotes (servers).
+/opt/cluster.git
+→ This acts like your central Git server.
+
+A working clone of it at
+/usr/src/kodekloudrepos/cluster
+→ This is the local working directory where you edit files, commit, etc.
+
+
+What is a remote repo in Git?
+A remote is simply a shortcut name that points to another Git repository (often on a server).
+Example:
+git remote add origin /opt/cluster.git
+
+This means:
+Your local repo in /usr/src/kodekloudrepos/cluster knows that there’s another repo (remote) at /opt/cluster.git.
+When you run git push origin master, your commits are sent to that repo.
+----------------------------------------------------------
+Adding remote REPO--->
+
+“Add a new remote dev_cluster and point it to /opt/xfusioncorp_cluster.git.”
+
+That means:
+
+You already have your main repo /usr/src/kodekloudrepos/cluster
+
+You now add a second remote connection (besides origin)
+
+This new remote (dev_cluster) points to a different bare repository at /opt/xfusioncorp_cluster.git
+
+Command:
+git remote add dev_cluster /opt/xfusioncorp_cluster.git
+
+Now, your working repo can push changes to either:
+
+The original remote (origin) → /opt/cluster.git
+Or the new one (dev_cluster) → /opt/xfusioncorp_cluster.git
+
+Why do this?
+This is common in multi-environment or multi-server setups:
+origin might be the main production repo.
+dev_cluster might be a development or test copy.
+You can push updates to both places, depending on what you’re deploying or testing.
+So instead of keeping two separate working directories, you can have:One repo (/usr/src/kodekloudrepos/cluster)
+
+Two remotes pointing to different bare repos on the storage server.
