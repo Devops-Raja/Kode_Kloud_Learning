@@ -1,0 +1,56 @@
+Merge Conflict?
+
+A merge conflict happens when Git can’t automatically decide
+which changes to keep from two different branches.
+
+When two people edit the same part of a file differently, Git needs your help.
+
+
+EG:
+
+Max users working on master branch and story.txt file
+Sara user worked and already pushed on master branch story.txt file
+
+now Max user - editing in the story.txt file and trying to push on master - Conflict Occurs
+
+Now Max pulling the origin repo ( git pull origin master)
+Then Max opens the story.txt file, removes conflict markers, keeps correct content,
+
+Then git add . / git commit / git push origin master
+
+
+
+Note: Git conflict need to be reviewed and Fixed 
+==================================================================================================
+
+GIT HOOKS:
+A Git hook is a script that Git runs automatically when certain events happen in a repository — like:
+before you commit,after you push,before merging, etc.
+
+cd your-repo/.git/hooks  ( Inside bare repo we have many hook files under the hook folder)
+pre-commit  --- 	Before a commit is made	Check code style, run tests, lint
+commit-msg	---     After writing commit message	Validate message format
+pre-push	---     Before pushing to remote	Run tests or checks
+post-commit  etc...
+
+
+We can edit our hook file according to our requirement
+
+In our case : we need to create post-update hook for Everytime change in the Master branch-
+it needs to create a release tag with date .
+
+cd to your bare repo .git/hooks/
+Edit the hooks as per requirement.
+
+Script : Referred from Internet
+
+Then-- Switch to your local repo and make changes and Push the Master. Then fetch locally as below
+git fetch --tags
+git tag
+
+you should see the results of your hooks (eg : release 14-10-2025 )
+
+
+
+=======================================================================================================
+
