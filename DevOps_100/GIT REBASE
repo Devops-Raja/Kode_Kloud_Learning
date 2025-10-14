@@ -1,0 +1,45 @@
+GIT REBASE:
+-- git rebase means “move your branch to start from a different commit.”
+It’s often used to:
+Keep a clean, linear commit history ( git merge will give a commit history )
+
+When to Use REBASE ---->
+master branch → has new commits pushed by others.
+feature branch → your developer is still working here.
+They want to update it with the latest master changes
+without losing their own work
+and without creating a merge commit
+
+
+👉 Now your feature branch looks like it was created after the latest main changes.
+✅ Clean, linear history
+❌ You should not rebase a branch that others are also using (it rewrites history).
+
+BEFORE:
+
+
+master:   A --- B --- C        ← (new commits added by others)
+              \
+feature:        D --- E         ← (developer’s ongoing work)
+
+
+AFTER:
+
+(master) A -- B -- C
+                     \
+(feature)              D' -- E'
+
+
+
+
+NOTE:::
+--If you get a conflict, Git will stop and tell you:
+CONFLICT (content): Merge conflict in <file>
+--You must fix the conflict manually in that file, then run:
+
+git add <file>
+git rebase --continue
+
+--If you want to cancel the rebase:
+
+git rebase --abort
