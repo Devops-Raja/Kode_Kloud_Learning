@@ -1,0 +1,30 @@
+NGINX DOCKER CONTAINER:
+
+-- docker pull imagename:tag
+-- docker run -d --name container_name  imagename:tag  ( -d detach mode)
+
+=====================================================================================
+
+COPY FILES TO DOCKER CONTAINER:
+
+docker cp <local_path> <container_name_or_id>:<container_path>
+
+eg: docker cp /tmp/index.html webserver:/var/www/html/
+
+======================================================================================
+
+RE-TAG & RE-NAME DOCKER IMAGE :
+
+docker tag image:tag new_image_name:new_tag_name
+
+======================================================================================
+
+CREATE DOCKER IMAGE FROM CONTAINER:
+
+docker commit <container_name_or_id> <new_image_name>:<tag>
+Example: docker commit ubuntu_latest news:xfusion
+
+This is useful when you’ve made manual changes inside a running container 
+(installed packages, changed files, etc.) and want to save those changes as a new image.
+
+========================================================================================
