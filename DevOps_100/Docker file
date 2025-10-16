@@ -1,0 +1,31 @@
+Docker File For Apache2:
+
+# Use Ubuntu 24.04 as base image
+FROM ubuntu:24.04
+
+# Set non-interactive mode for apt
+ENV DEBIAN_FRONTEND=noninteractive  
+
+# Update package list and install Apache2
+RUN apt update && apt install -y apache2
+
+# Change Apache listening port from 80 to 5004
+RUN sed -i 's/Listen 80/Listen 5004/' /etc/apache2/ports.conf && \
+    sed -i 's/<VirtualHost \*:80>/<VirtualHost *:5004>/' /etc/apache2/sites-available/000-default.conf
+
+# Expose port 5004
+EXPOSE 5004
+
+# Start Apache in foreground (so container keeps running)
+CMD ["apachectl", "-D", "FOREGROUND"]
+
+
+----------------------------------------------------
+
+--> Build docker images using Docker file
+docker build -t apache:custom  .     ( run in the path where Dockerfile present )
+docker build -t <image_name>:<tag> <build_context_path>
+
+
+Run the Container
+docker run -d --name apache2 -p 5004:5004 apache2:custom
