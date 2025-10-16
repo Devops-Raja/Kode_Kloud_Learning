@@ -1,0 +1,17 @@
+Docker Network:
+
+What is Macvlan:
+macvlan lets each container appear on the same physical LAN as the host, 
+with its own MAC and IP address.
+It’s used when you want containers to behave like separate physical devices on your local network.
+
+CMD:  docker network create -d macvlan --subnet=192.168.0.0/24 --ip-range=192.168.0.0/24 media
+
+Notes:
+-d driver : macvlan 
+subnet range & IP range (Restricts Docker to use only a specific range within that subnet)
+media -- Network name
+
+Verify :
+docker network ls
+docker network inspect network_name
