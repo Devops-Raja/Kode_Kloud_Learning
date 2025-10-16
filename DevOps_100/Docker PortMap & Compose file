@@ -1,0 +1,29 @@
+Docker Port Mapping:
+
+Port mapping lets you connect a port on your host system → to a port inside the container.
+
+docker run -p <HOST_PORT>:<CONTAINER_PORT> <image_name>
+
+docker run -d -p 8087:80 --name blog  nginx:alpine-perl
+
+
+=========================================DONE===============================================
+
+DOCKER COMPOSE FILE FOR HTTPD:
+
+version: '3'
+
+services:
+  webapp:
+    image: httpd:latest
+    container_name: httpd
+    ports:
+      - "3001:80"   #host port:container_port
+    volumes:
+      - /opt/itadmin:/usr/local/apache2/htdocs  #Volume Mapping == Host volume: Container_volume
+
+
+---------------------------
+CMD : docker compose up -d  # -d = detach mode
+
+===========================================END================================================
