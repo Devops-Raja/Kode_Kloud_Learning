@@ -1,0 +1,73 @@
+Deploy a Python App in Docker:
+
+-- Create a Docker file outside /src/ path.
+-- you can simply write the file or you can write multistage docker file for light image.
+
+# Use a base Python image
+FROM python:3.9-slim
+
+# Set the working directory inside the container
+WORKDIR /python_app
+
+# Copy dependency file first (for efficient layer caching)
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application files
+COPY . .
+
+# Expose the application port
+EXPOSE 8086
+
+# Run the Python application
+CMD ["python", "server.py"]
+
+---------------------------------------------------END_--------------------------------------------------
+---------------------------------------------------------------
+MULTI STAGE   [ Light weight Docker File ]
+---------------------------------------------------------------
+# --------------------------
+# Stage 1: Build dependencies
+# --------------------------
+FROM python:3.12-alpine AS builder
+
+# Set working directory
+WORKDIR /python_app
+
+# Install build tools only in this stage
+RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev
+
+# Copy dependency list and install packages
+COPY /src/requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+
+# --------------------------
+# Stage 2: Final lightweight image
+# --------------------------
+FROM python:3.12-alpine
+
+# Set working directory
+WORKDIR /python_app
+
+# Copy installed dependencies from builder stage
+COPY --from=builder /install /usr/local
+
+# Copy application files
+COPY . .
+
+# Expose app port
+EXPOSE 5004
+
+# Run the application
+CMD ["python", "/python_app/src/server.py"]
+
+
+================================================================================
+
+
+-- Build the Image and Run as a docker Container
+
+============================================END========================================			
