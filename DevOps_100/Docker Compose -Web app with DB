@@ -1,0 +1,44 @@
+Fixing Dockerfile Commands:
+ 
+IMAGE httpd:2.4.43   -->  FROM httpd:2.4.43
+Reason: FROM is the correct instruction to specify base image
+
+ADD sed -i ...   -->  After: RUN sed -i ...
+Reason: ADD is for copying files, RUN is for executing commands
+
+conf/httpd.conf  --> /usr/local/apache2/conf/httpd.conf
+Reason: Need full absolute paths for sed commands to work correctly
+
+--Test the build image & Run the container to verify
+================================================================================================
+
+DEPPLOY APP ON DOCKER:
+
+Docker Compose File:
+
+services:
+  webapp:
+    container_name: php_host
+    image: php:apache
+    ports:
+      - "3001:80"
+    volumes:
+      - /var/www/html:/var/www/html
+    depends_on:
+      - database
+
+  database:
+    container_name: mysql_host
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: database_host
+      MYSQL_USER: rajaram
+      MYSQL_PASSWORD: Rajaram7800.
+      MYSQL_ROOT_PASSWORD: RootTempPass123
+	  
+--------------------------------------------------------------------
+
