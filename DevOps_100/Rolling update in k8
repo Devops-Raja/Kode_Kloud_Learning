@@ -1,0 +1,22 @@
+Rolling Updates in K8:
+
+A Rolling Update is a deployment strategy that updates your application gradually, 
+replacing old Pods with new Pods one by one, without downtime.
+
+🔹 Old version → New version🔹 Traffic continues to flow ✅
+🔹 No sudden shutdown ✅🔹 Easy rollback if issues occur ✅
+
+Task: Execute the rolling update for application using the new nginx image version 1.18
+
+
+thor@jumphost ~$ kubectl set image deployment/nginx-deployment nginx-container=nginx:1.18
+deployment.apps/nginx-deployment image updated
+
+thor@jumphost ~$ kubectl rollout status deployment/nginx-deployment
+deployment "nginx-deployment" successfully rolled out
+
+thor@jumphost ~$ kubectl describe deployment nginx-deployment | grep Image
+    Image:         nginx:1.18
+thor@jumphost ~$ kubectl get pods -o wide
+
+
