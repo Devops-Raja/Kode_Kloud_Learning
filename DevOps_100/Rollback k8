@@ -1,0 +1,25 @@
+UNDO ROLLING UPDATE:
+
+kubectl rollout history deployment nginx    (TO CHECK THE HISTORY  via output )
+---------------------------------------------------------------------------------
+
+thor@jumphost ~$ kubectl rollout history deployment nginx-deployment
+deployment.apps/nginx-deployment 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         kubectl set image deployment nginx-deployment nginx-container=nginx:alpine-perl --kubeconfig=/root/.kube/config --record=true
+
+--- Which version you want to rollback:
+kubectl rollout undo deployment/nginx-deployment --to-revision=1
+
+--- kubectl rollout undo deployment/nginx-deployment  ( Rollback one step )
+
+
+Check the rollback:
+kubectl rollout status deployment/nginx-deployment
+
+
+--- Confirm pods are running healthy
+
+
++===============================================================================
