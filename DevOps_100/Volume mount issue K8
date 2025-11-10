@@ -1,0 +1,24 @@
+Resolve Volume Mount issue in K8:
+"nginx-phpfpm" Pods have two containers ( nginx-container & phpfpm container )
+
+-- Kubectl describe configmap <configmap_name>
+configmap is mounted with " root /var/www/html "
+
+Get the yaml file -->   kubectl get pod nginx-phpfpm -o yaml  > /tmp/nginx.yaml
+now edit the yaml file, as below
+
+replace this "/usr/share/nginx/html" with "/var/www/html" in nginx  mount path places in that yaml
+
+Then delete the old pod [ kubectl delete pod <pod_name>
+
+--> kubectl apply -f new_yaml.yml
+
+Copy the index file into nginx root location
+--> kubectl cp  /home/thor/index.php  nginx-phpfpm:/var/www/html -c nginx-container
+
+validate by curl  
+--> kubectl exec -it nginx-phpfpm -c nginx-container  -- curl -I  http://localhost:8099
+
+
+Reference link: 
+https://medium.com/@bouss3id.abdelkader/kodekloud-fix-issue-with-volumemounts-in-kubernetes-good-explanation-fe4d09729dbe
