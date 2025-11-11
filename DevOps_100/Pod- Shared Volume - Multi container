@@ -1,0 +1,49 @@
+K8 Shared Volumes:
+
+Pod which contains multiple containers and sharing the "Shared Volume"
+-------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-share-nautilus
+spec:
+  containers:
+    - name: volume-container-nautilus-1
+      image: debian:latest
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: volume-share
+          mountPath: /tmp/blog
+
+    - name: volume-container-nautilus-2
+      image: debian:latest
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: volume-share
+          mountPath: /tmp/demo
+
+  volumes:
+    - name: volume-share
+      emptyDir: {}
+----------------------------------------------------------
+
+
+Create the Pod : kubectl apply -f volume-share-nautilus.yaml 
+
+
+Now both containers are created and using the shared volume in the mount path.
+Eg:  Create a file in /tmp/blog/ path in container-nautilus-1  & it can be read and available in /tmp/demo/ in container-nautilus-2
+
+
+kubectl exec -it volume-share-nautilus -c volume-container-nautilus-1 bash
+-- Inside create a file /tmp/blog/test.txt
+
+
+kubectl exec -it volume-share-nautilus -c volume-container-nautilus-2 bash
+-- Inside /tmp/demo/  the test.txt will be available.
+
+optional command: kubectl exec -it volume-share-nautilus -c volume-container-nautilus-2 -- cat /tmp/demo/test.txt
+
+
+
+-------------------END----------------------------
