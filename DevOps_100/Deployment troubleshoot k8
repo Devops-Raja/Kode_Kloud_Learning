@@ -1,0 +1,27 @@
+Trobleshoot Deployment issue in K8:
+
+Deployment is not created , App went down:
+
+-- kubectl describe pod redis-deployment-6fd9d5fcb-ld2kb 
+
+Error:  MountVolume.SetUp failed for volume "config" : configmap "redis-cofig" not found
+--------------------------------------------------------------------------------------------
+thor@jumphost ~$ kubectl get cm
+NAME               DATA   AGE
+kube-root-ca.crt   1      25m
+redis-config       2      18m
+thor@jumphost ~$ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+redis-deployment   0/1     1            0           19m
+
+-----------------------------------------------------------------------------------------------
+Spelling mismatch in deployment file -- redis-cofig instead of "redis-config"
+so pull out yaml file from deployment
+
+
+-->kubectl get deployment.apps redis-deployment -o yaml > redis-deployment.yaml
+-- Edit the yaml file with right spelling of config map and Image name.
+
+Issue resolved 
+
+----------------------------------------------DONE-------------------------------------------------
