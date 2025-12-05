@@ -1,0 +1,43 @@
+SETUP GRAFANA in K8:
+----------------------------------------------------------------------------------------------------------------
+YAML
+----------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment-devops               # Deployment name
+spec:
+  replicas: 1                                   # Number of pod replicas (you can change)
+  selector:
+    matchLabels:
+      app: grafana                              # Label selector for pods
+  template:
+    metadata:
+      labels:
+        app: grafana                            # Label applied to pods
+    spec:
+      containers:
+      - name: grafana-container                 # Container name
+        image: grafana/grafana:latest           # Grafana image (latest tag)
+        ports:
+        - containerPort: 3000                   # Grafana default port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service                         # Service name
+spec:
+  type: NodePort                                # Expose externally via NodePort
+  selector:
+    app: grafana                                # Maps service to deployment pods
+  ports:
+  - port: 3000                                  # Service port
+    targetPort: 3000                            # Pod container port
+    nodePort: 32000                             # Fixed NodePort for access
+
+
+
+
+
+-------------------------------------------------DONE---------------------------------------------------------------
