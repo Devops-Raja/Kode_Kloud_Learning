@@ -1,0 +1,32 @@
+Print Environment Variables :
+Create a pod which print Greetings -->
+
+-----------------------------------------------------------------------------------------------------------------
+YAML
+-----------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: print-envars-greeting            # Pod name
+spec:
+  restartPolicy: Never                   # Prevent restart / CrashLoopBackOff
+  containers:
+  - name: print-env-container            # Container name
+    image: bash                          # Using bash image
+    env:                                 # Environment variables
+    - name: GREETING
+      value: "Welcome to"
+    - name: COMPANY
+      value: "Nautilus"
+    - name: GROUP
+      value: "Datacenter"
+    command: ["/bin/sh", "-c", 'echo "$(GREETING) $(COMPANY) $(GROUP)"']
+   
+
+-----------------------------------------------------------------------------------------------------------------
+
+Output:
+thor@jumphost ~$ kubectl logs -f print-envars-greeting 
+Welcome to Nautilus Datacenter
+
+----------------------------------------------------DONE-------------------------------------------------------------
