@@ -1,0 +1,41 @@
+SIDE CAR CONTAINER --> is a helper container that runs inside the same pod as the main application container.
+They share the same network, same volumes, and same lifecycle.
+
+--The main container does the primary job (example: Nginx serving web pages).
+--The sidecar container does a supporting task (example: reading logs, shipping logs, syncing files, updating configs, monitoring, etc.).
+
+----------------------------------------------------------------------------------------------------------------
+YAML File
+----------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webserver
+spec:
+  volumes:
+    - name: shared-logs
+      emptyDir: {}       ##(empty dir used because it creates temp directory in volume, when pod dead data will be gone)
+
+  containers:
+    - name: nginx-container     ##(primary container shares the webpage)
+      image: nginx:latest
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/nginx
+
+    - name: sidecar-container    ##(helper container which ships the logs to log aggregating service)
+      image: ubuntu:latest
+      command: ["sh", "-c", "while true; do cat /var/log/nginx/access.log /var/log/nginx/error.log; sleep 30; done"]
+      volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/nginx
+----------------------------------------------------------------------------------------------------------------
+
+-->  kubectl apply -f webserver.yml 
+-->  kubectl get pods -o wide
+--> kubectl logs webserver -c sidecar-container  ## checks the logs prints
+--> Checking nginx running fine -->  kubectl exec -it webserver -c nginx-container -- curl http://localhost
+--> Checking logs are inside container --> kubectl exec -it webserver -c sidecar-container -- ls -l /var/log/nginx
+
+
+----------------------------------DONE---------------------------------------------------------------------------
