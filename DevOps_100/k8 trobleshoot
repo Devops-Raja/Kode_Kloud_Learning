@@ -1,0 +1,61 @@
+K8 Troubleshooting:
+----------------------------------------------------------------------------
+Error in Pod:
+
+Warning  Failed     6m11s (x5 over 9m1s)  kubelet            
+Failed to pull image "poroko/flask-app-demo": failed to pull and unpack image "docker.io/poroko/flask-app-demo:latest": failed to resolve reference "docker.io/poroko/flask-app-demo:latest": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+Warning  Failed     6m11s (x5 over 9m1s)  kubelet            
+Error: ErrImagePull
+
+----------------------------------------------------------------------------
+Solution:
+Change the proper image name in deployment file and re-apply.
+
+Then issue No.2:
+
+---------------- APP is listening on port 5000 but in SVC file it mentioned as 8080 --------------
+Containers:
+  python-container-nautilus:
+    Container ID:   containerd://60468c2d2ac1e91c6b2e9e2bb7b1d0f35f58ec9f70fe899a9d9fda6334d053ee
+    Image:          poroko/flask-demo-app
+    Image ID:       docker.io/poroko/flask-demo-app@sha256:c52bfc42b8766566df7da383f6e08d77f56ca022c7ea94fce51aa5b7ef66639b
+    Port:           5000/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Thu, 12 Mar 2026 06:17:38 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+----------------------------------------------------------------------------	
+	
+Root cause:
+
+Container port
+Port: 5000/TCP
+But your Service endpoint shows
+10.22.0.11:8080
+----------------------------------------------------------------------------
+So Kubernetes is currently trying this below:
+
+
+Browser → NodePort 32345 → Service 8080 → Pod 8080 ❌ 
+
+But the Flask application is running on 5000, so the service cannot reach it.
+
+Fix the  targetPort in SVC yaml and re-apply.
+
+----------------------------------------------------------------------------
+Now traffic flow becomes:
+
+Browser
+   ↓
+NodeIP:32345
+   ↓
+Service:8080
+   ↓
+Pod:5000
+   ↓
+Flask App
+
+----------------------------------------------------------------------------
